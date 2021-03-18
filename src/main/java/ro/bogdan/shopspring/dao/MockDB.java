@@ -35,15 +35,34 @@ public class MockDB {
         return null;
     }
 
-    public void addProduct(Product product) {
+    public boolean addProduct(Product product) {
+        // We test if the product is already in the list
+        for (Product product1 : productList) {
+            if (product1.getProductCode().equals(product.getProductCode())) {
+                return false;
+            }
+        }
         productList.add(product);
+        return true;
     }
 
-    public void removeProduct(int index) {
+    public boolean removeProduct(int index) {
+        if (index >= productList.size()) {
+            return false;
+        }
         productList.remove(index);
+        return true;
     }
 
-    public void removeProduct(String productCode) {
-        productList.removeIf(product -> product.getProductCode().equals(productCode));
+    public boolean removeProduct(String productCode) {
+        // We test if there is a product with the assigned code
+        for (int i = 0; i < productList.size(); i++) {
+            if (productCode.equals(productList.get(i).getProductCode())) {
+                productList.remove(i);
+                return true;
+            }
+        }
+        return false;
+        //productList.removeIf(product -> product.getProductCode().equals(productCode));
     }
 }

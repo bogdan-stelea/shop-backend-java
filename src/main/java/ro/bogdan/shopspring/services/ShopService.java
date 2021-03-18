@@ -33,7 +33,9 @@ public class ShopService {
             return productValidation;
         }
         // We assume that the DB handles "Existing product validation"
-        mockDB.addProduct(product);
+        if (!mockDB.addProduct(product)) {
+            return "Product already exists";
+        }
         return "Product successfully added";
     }
 
@@ -42,16 +44,20 @@ public class ShopService {
             return "Invalid input";
         }
         // We assume that the DB handles "Array out of bounds validation"
-        mockDB.removeProduct(index);
+        if (!mockDB.removeProduct(index)) {
+            return "Index out of bounds";
+        }
         return "Item removed successfully";
     }
 
     public String removeProduct(String productCode) {
-        if(productCode == null || productCode.trim().isEmpty()) {
+        if (productCode == null || productCode.trim().isEmpty()) {
             return "Invalid product code";
         }
-        //We assume that the DB handles "Nonexistent product"
-        mockDB.removeProduct(productCode);
+        // We assume that the DB handles "Nonexistent product"
+        if (!mockDB.removeProduct(productCode)) {
+            return "Item not found";
+        }
         return "Item removed successfully";
     }
 
