@@ -3,16 +3,15 @@ package ro.bogdan.shopspring.models;
 import java.util.Random;
 
 public class Client {
-    private final String clientCode;
+    private  String clientCode;
     private PersonalData personalData;
-    Random rand = new Random();
 
     public Client() {
-        this.clientCode = String.valueOf(rand.nextInt(10000));
+
     }
 
-    public Client(PersonalData personalData) {
-        this.clientCode = String.valueOf(rand.nextInt(10000));
+    public Client(String clientCode,PersonalData personalData) {
+        this.clientCode = clientCode;
         this.personalData = personalData;
     }
 
@@ -21,8 +20,8 @@ public class Client {
     }
 
     public static class PersonalData {
-        private String lastname;
-        private String surname;
+        private final String lastname;
+        private final String surname;
         private String phoneNumber;
 
         public PersonalData(String lastname, String surname, String phoneNumber) {

@@ -35,8 +35,8 @@ public class Shop {
     }
 
     public void addProduct(Product product) {
-        if (!products.containsKey(product.getProductCode())) {
-            this.products.put(product.getProductCode(), product);
+        if (!products.containsKey(product.getCode())) {
+            this.products.put(product.getCode(), product);
         } else {
             System.out.println("Product already exists");
         }
@@ -44,7 +44,7 @@ public class Shop {
 
     public void addTransaction(Transaction transaction) {
         if (!transactions.containsKey(transaction)) {
-            this.transactions.put(transaction.getTransactionCode(), transaction);
+            this.transactions.put(transaction.getCode(), transaction);
         }
     }
 

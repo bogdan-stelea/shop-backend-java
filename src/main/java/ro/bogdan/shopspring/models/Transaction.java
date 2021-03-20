@@ -4,18 +4,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction {
-    private String transactionCode;
+    private String code;
     private String clientCode;
     private String productCode;
     private int productPrice;
     private int productQuantity;
-    private int value;
+    private double value;
     private PaymentMethod paymentMethod;
     private LocalDateTime date;
-    private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private final DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    Transaction(String transactionCode, String clientCode, String productCode, int value, PaymentMethod paymentMethod) {
-        this.transactionCode = transactionCode;
+    public Transaction(String transactionCode, String clientCode, String productCode, double value, PaymentMethod paymentMethod) {
+        this.code = transactionCode;
         this.clientCode = clientCode;
         this.productCode = productCode;
         this.value = value;
@@ -27,12 +27,12 @@ public class Transaction {
         this.date = LocalDateTime.now();
     }
 
-    public String getTransactionCode() {
-        return transactionCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setTransactionCode(String transactionCode) {
-        this.transactionCode = transactionCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getClientCode() {
@@ -67,11 +67,11 @@ public class Transaction {
         this.productQuantity = productQuantity;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -98,7 +98,7 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "transactionCode='" + transactionCode + '\'' +
+                "transactionCode='" + code + '\'' +
                 ", clientCode='" + clientCode + '\'' +
                 ", productCode='" + productCode + '\'' +
                 ", productPrice=" + productPrice +
