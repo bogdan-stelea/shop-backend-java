@@ -5,139 +5,101 @@ import ro.bogdan.shopspring.models.PaymentMethod;
 import ro.bogdan.shopspring.models.Product;
 import ro.bogdan.shopspring.models.Transaction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class MockDB {
-    private List<Product> productList;
-    private List<Transaction> transactionList;
-    private List<Client> clientList;
+    private Map<String, Product> productMap;
+    private Map<String, Transaction> transactionMap;
+    private Map<String, Client> clientMap;
+    private Stack<String> transactionCodeStack;
 
 
     public MockDB() {
-        productList = new ArrayList<>();
-        transactionList = new ArrayList<>();
+        productMap = new HashMap<>();
+        transactionMap = new HashMap<>();
+        clientMap = new HashMap<>();
+        transactionCodeStack = new Stack<>();
         init();
     }
 
     public void init() {
-        productList = new ArrayList<>(Arrays.asList(
-                new Product("5B3raA", 5, "Cui", "AREWQWEqeq", 10, "https://us.123rf.com/450wm/coprid/coprid1903/coprid190300005/118914375-top-view-of-metal-open-end-wrench-isolated-on-white.jpg?ver=6"),
-                new Product("1234AB", 24, "Cuw", "asdfQWET", 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg"),
-                new Product("123has", 24, "Cuw", "asdfQWET", 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg"),
-                new Product("8472SA", 24, "Cuw", "asdfQWET", 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg")
-        ));
-        clientList = new ArrayList<>(Arrays.asList(
-                new Client("1234", new Client.PersonalData("IOBN", "GION", "5325123")),
-                new Client("2345", new Client.PersonalData("ter", "teaw", "1423467")),
-                new Client("3456", new Client.PersonalData("tsgdsa", "dgawer", "041241234"))
-        ));
+        productMap.put("5B3raA", new Product("5B3raA", "Cui", "AREWQWEqeq", 5, 10, "https://us.123rf.com/450wm/coprid/coprid1903/coprid190300005/118914375-top-view-of-metal-open-end-wrench-isolated-on-white.jpg?ver=6"));
+        productMap.put("1234AB", new Product("1234AB", "Cuw", "asdfQWET", 24, 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg"));
+        productMap.put("123has", new Product("123has", "Cuw", "asdfQWET", 24, 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg"));
+        productMap.put("8472SA", new Product("8472SA", "Cuw", "asdfQWET", 24, 25, "https://image.shutterstock.com/image-vector/pickaxe-illustration-symbol-money-graphic-260nw-1109559692.jpg"));
+
+        clientMap.put("1234", new Client(new Client.PersonalData("IOBN", "GION", "5325123")));
+        clientMap.put("2345", new Client(new Client.PersonalData("ter", "teaw", "1423467")));
+        clientMap.put("3456", new Client(new Client.PersonalData("tsgdsa", "dgawer", "041241234")));
+
+        for (int i = 10000; i > 0; i--) {
+            transactionCodeStack.push(String.valueOf(i));
+        }
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Map<String, Product> getProductMap() {
+        return productMap;
+    }
+
+    public Map<String, Client> getClientMap() {
+        return clientMap;
     }
 
     public Product getProduct(String productId) {
-        for (Product product : productList) {
-            if (product.getCode().equals(productId)) {
-                return product;
-            }
+
+        if (productMap.containsKey(productId)) {
+            return productMap.get(productId);
         }
+
         return null;
     }
 
-    public boolean addProduct(Product product) {
+    public boolean addProduct(String productCode, Product product) {
         // We test if the product is already in the list
-        for (Product product1 : productList) {
-            if (product1.getCode().equals(product.getCode())) {
-                return false;
-            }
-        }
-        productList.add(product);
-        return true;
-    }
 
-    public boolean removeProduct(int index) {
-        if (index >= productList.size()) {
+        if (productMap.containsKey(productCode)) {
             return false;
         }
-        productList.remove(index);
+        productMap.put(productCode, product);
         return true;
     }
 
     public boolean removeProduct(String productCode) {
         // We test if there is a product with the assigned code
-        for (int i = 0; i < productList.size(); i++) {
-            if (productCode.equals(productList.get(i).getCode())) {
-                productList.remove(i);
-                return true;
-            }
+
+        if (!productMap.containsKey(productCode)) {
+            return false;
         }
-        return false;
-        //productList.removeIf(product -> product.getProductCode().equals(productCode));
+        productMap.remove(productCode);
+        return true;
+
     }
 
-    public List<Transaction> getTransactionList() {
-        return transactionList;
+    public Map<String, Transaction> getTransactionMap() {
+        return transactionMap;
     }
 
     public Transaction getTransaction(String transactionCode) {
-        for (Transaction transaction : transactionList) {
-            if (transaction.getCode().equals(transactionCode)) {
-                return transaction;
-            }
+        if (!transactionMap.containsKey(transactionCode)) {
+            return null;
         }
-        return null;
+        return transactionMap.get(transactionCode);
     }
 
     public boolean addTransaction(String productCode, String clientCode, int productQuantity, String paymentMethod) {
-        boolean productCodeValidation = false;
-        boolean clientCodeValidation = false;
-        boolean productQuantityValidation = false;
-        PaymentMethod paymentMethodChanged;
-        Product chosenProduct = new Product();
-        Client chosenClient = new Client();
-
-        for (Product product : productList) {
-            if (product.getCode().equals(productCode)) {
-                if (product.getStock() >= productQuantity) {
-                    productQuantityValidation = true;
-                } else {
-                    return false;
-                }
-                productCodeValidation = true;
-                chosenProduct = product;
-                break;
-            }
-        }
-
-        if (!productCodeValidation) {
+        Transaction transaction = new Transaction();
+        // We test if there is a transaction with same code
+        if (transactionCodeStack.isEmpty()) {
             return false;
         }
-
-        for (Client client : clientList) {
-            if (client.getClientCode().equals(clientCode)) {
-                clientCodeValidation = true;
-                chosenClient = client;
-                break;
-            }
-        }
-
-        if (!clientCodeValidation) {
-            return false;
-        }
-
-        if (paymentMethod.equals("CARD")) {
-            paymentMethodChanged = PaymentMethod.CARD;
-        } else {
-            paymentMethodChanged = PaymentMethod.CASH;
-        }
-
-        Transaction newTransaction = new Transaction(Integer.toString(new Random().nextInt(Integer.MAX_VALUE)), chosenClient.getClientCode(), chosenProduct.getCode(), chosenProduct.getPrice() * productQuantity, paymentMethodChanged);
-        transactionList.add(newTransaction);
+        transaction.setCode(transactionCodeStack.pop());
+        transaction.setClientCode(clientCode);
+        transaction.setProductCode(productCode);
+        transaction.setProductPrice(productMap.get(productCode).getPrice());
+        transaction.setProductQuantity(productQuantity);
+        transaction.setValue(productQuantity * transaction.getProductPrice());
+        transaction.setPaymentMethod(PaymentMethod.valueOf(paymentMethod));
+        transactionMap.put(transaction.getCode(), transaction);
         return true;
     }
 }

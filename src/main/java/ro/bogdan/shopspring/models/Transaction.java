@@ -2,12 +2,13 @@ package ro.bogdan.shopspring.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class Transaction {
     private String code;
     private String clientCode;
     private String productCode;
-    private int productPrice;
+    private double productPrice;
     private int productQuantity;
     private double value;
     private PaymentMethod paymentMethod;
@@ -23,7 +24,7 @@ public class Transaction {
         this.date = LocalDateTime.now();
     }
 
-    Transaction() {
+    public Transaction() {
         this.date = LocalDateTime.now();
     }
 
@@ -51,11 +52,11 @@ public class Transaction {
         this.productCode = productCode;
     }
 
-    public int getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(int productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 

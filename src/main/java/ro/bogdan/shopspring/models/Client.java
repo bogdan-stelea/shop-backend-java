@@ -3,20 +3,14 @@ package ro.bogdan.shopspring.models;
 import java.util.Random;
 
 public class Client {
-    private  String clientCode;
     private PersonalData personalData;
 
     public Client() {
 
     }
 
-    public Client(String clientCode,PersonalData personalData) {
-        this.clientCode = clientCode;
+    public Client(PersonalData personalData) {
         this.personalData = personalData;
-    }
-
-    public String getClientCode() {
-        return clientCode;
     }
 
     public static class PersonalData {
@@ -67,7 +61,6 @@ public class Client {
     @Override
     public String toString() {
         return "Client{" +
-                "clientCode='" + clientCode + '\'' +
                 ", personalData=" + personalData +
                 '}';
     }

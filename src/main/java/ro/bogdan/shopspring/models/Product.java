@@ -12,11 +12,11 @@ public class Product {
 
     }
 
-    public Product(String code, int stock, String name, String description, double price, String imageURL) {
+    public Product(String code, String name, String description, int stock ,double price, String imageURL) {
         this.code = code;
-        this.stock = stock;
         this.name = name;
         this.description = description;
+        this.stock = stock;
         this.price = price;
         this.imageURL = imageURL;
     }
